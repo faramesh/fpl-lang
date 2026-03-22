@@ -1,0 +1,10 @@
+agent payment-bot {
+  default deny
+
+  rules {
+    deny! shell/run
+      reason: "dangerous command"
+
+    permit read_customer
+  }
+}

@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  docs-and-layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate repository layout
+        run: |
+          test -f README.md
+          test -f spec/SPECIFICATION.md
+          test -f grammar/fpl.ebnf
+          test -d examples
+          test -d conformance
+      - name: Validate conformance fixtures
+        run: bash scripts/check-conformance.sh
+
+  go-reference-parser:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: reference/go
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23.x"
+      - name: Test reference parser
+        run: go test ./...

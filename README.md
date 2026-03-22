@@ -125,9 +125,35 @@ faramesh run --policy policy.fpl -- python agent.py
 
 `.fpl`
 
+## Repository structure
+
+This repository now follows a language-repo shape inspired by mature DSL projects.
+
+- `spec/` formal language specification
+- `grammar/` EBNF grammar
+- `examples/` practical policy examples
+- `conformance/` valid/invalid fixture corpus for language compatibility testing
+- `reference/go/` experimental Go reference parser scaffold and CLI
+- `editors/` editor tooling plans and upcoming grammar packages
+
+The production-grade parser/compiler in `faramesh-core` remains the source of truth for runtime governance behavior. The `fpl-lang` repo focuses on language specification, conformance, and independent language tooling.
+
 ## Editor support
 
 Planned: VS Code extension, JetBrains plugin, Neovim treesitter grammar. See [editors/](editors/) for details.
+
+## Developer workflow
+
+```bash
+# Run repository checks
+make test
+
+# Run the experimental Go reference parser tests
+cd reference/go && go test ./...
+
+# Parse a fixture and print JSON AST
+cd reference/go && go run ./cmd/fplparse ../../conformance/valid/basic-agent.fpl
+```
 
 ## License
 
