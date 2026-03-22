@@ -1,0 +1,135 @@
+(* FPL — Faramesh Policy Language Grammar *)
+(* EBNF notation (ISO 14977) *)
+
+Document       = { AgentBlock | SystemBlock | ManifestStmt | Comment } ;
+
+(* ── Top-level blocks ──────────────────────────────────────────────────── *)
+
+AgentBlock     = "agent" Ident "{" { AgentBody } "}" ;
+SystemBlock    = "system" Ident "{" { SystemBody } "}" ;
+
+(* ── Agent body ────────────────────────────────────────────────────────── *)
+
+AgentBody      = DefaultDecl
+               | ModelDecl
+               | FrameworkDecl
+               | VersionDecl
+               | VarDecl
+               | BudgetBlock
+               | PhaseBlock
+               | RulesBlock
+               | DelegateBlock
+               | AmbientBlock
+               | SelectorBlock
+               | CredentialBlock
+               | Comment ;
+
+DefaultDecl    = "default" Effect ;
+ModelDecl      = "model" StringLit ;
+FrameworkDecl  = "framework" StringLit ;
+VersionDecl    = "version" StringLit ;
+VarDecl        = "var" Ident Value ;
+
+(* ── Budget block ──────────────────────────────────────────────────────── *)
+
+BudgetBlock    = "budget" BudgetScope "{" { BudgetProp } "}" ;
+BudgetScope    = "session" | "global" ;
+BudgetProp     = "max" Currency
+               | "daily" Currency
+               | "max_calls" Integer
+               | "on_exceed" Effect ;
+
+(* ── Phase block ───────────────────────────────────────────────────────── *)
+
+PhaseBlock     = "phase" Ident "{" { Rule } "}" ;
+
+(* ── Rules block ───────────────────────────────────────────────────────── *)
+
+RulesBlock     = "rules" "{" { Rule } "}" ;
+
+(* ── Rule syntax ───────────────────────────────────────────────────────── *)
+
+Rule           = Effect ToolPattern [ WhenClause ] [ NotifyClause ] [ ReasonClause ] [ ReevalClause ] ;
+Effect         = "permit" | "deny" | "deny!" | "defer" | "allow" | "approve" | "block" | "reject" ;
+ToolPattern    = Ident { "/" ( Ident | "*" ) } | "*" ;
+WhenClause     = "when" Condition ;
+NotifyClause   = "notify:" StringLit ;
+ReasonClause   = "reason:" StringLit ;
+ReevalClause   = "reeval:" ( "true" | "false" ) ;
+
+(* ── Conditions ────────────────────────────────────────────────────────── *)
+
+Condition      = OrExpr ;
+OrExpr         = AndExpr { "or" AndExpr } ;
+AndExpr        = NotExpr { "and" NotExpr } ;
+NotExpr        = [ "not" ] Comparison ;
+Comparison     = Term ( CompOp Term | "matches" StringLit | "in" ListLit ) ;
+CompOp         = ">" | ">=" | "<" | "<=" | "==" | "!=" ;
+Term           = FieldAccess | Currency | Integer | Float | StringLit | FuncCall ;
+FieldAccess    = Ident { "." Ident } ;
+FuncCall       = FieldAccess "(" ArgList ")" ;
+ArgList        = [ Arg { "," Arg } ] ;
+Arg            = FieldAccess | StringLit | NamedArg ;
+NamedArg       = Ident "=" Value ;
+
+(* ── Delegate block ────────────────────────────────────────────────────── *)
+
+DelegateBlock  = "delegate" Ident "{" { DelegateProp } "}" ;
+DelegateProp   = "scope" StringLit
+               | "ttl" Duration
+               | "ceiling" ( "inherited" | StringLit ) ;
+
+(* ── Ambient block ─────────────────────────────────────────────────────── *)
+
+AmbientBlock   = "ambient" "{" { AmbientProp } "}" ;
+AmbientProp    = Ident Integer
+               | Ident DataSize
+               | "on_exceed" Effect ;
+
+(* ── Selector block ────────────────────────────────────────────────────── *)
+
+SelectorBlock  = "selector" Ident "{" { SelectorProp } "}" ;
+SelectorProp   = "source" StringLit
+               | "cache" Duration
+               | "on_unavailable" Effect
+               | "on_timeout" Effect ;
+
+(* ── Credential block ──────────────────────────────────────────────────── *)
+
+CredentialBlock = "credential" Ident "{" { CredProp } "}" ;
+CredProp       = "backend" Ident
+               | "path" StringLit
+               | "scope" IdentList
+               | "max_scope" StringLit
+               | "ttl" Duration ;
+
+(* ── System block ──────────────────────────────────────────────────────── *)
+
+SystemBody     = "version" StringLit
+               | "on_policy_load_failure" Ident
+               | "max_output_bytes" Integer
+               | Comment ;
+
+(* ── Manifest statements ───────────────────────────────────────────────── *)
+
+ManifestStmt   = "manifest" ManifestVerb ManifestArgs ;
+ManifestVerb   = "orchestrator" | "grant" ;
+ManifestArgs   = Ident { Ident | Integer | StringLit } ;
+
+(* ── Lexical elements ─────────────────────────────────────────────────── *)
+
+Ident          = Letter { Letter | Digit | "_" | "-" } ;
+IdentList      = Ident { Ident } ;
+StringLit      = '"' { Character } '"' ;
+Integer        = Digit { Digit } ;
+Float          = Digit { Digit } "." Digit { Digit } ;
+Currency       = "$" ( Integer | Float ) ;
+Duration       = Integer ( "s" | "m" | "h" | "d" | "w" ) ;
+DataSize       = Integer ( "kb" | "mb" | "gb" ) ;
+Value          = StringLit | Integer | Float | Currency | Duration | DataSize | "true" | "false" ;
+ListLit        = "[" [ Value { "," Value } ] "]" ;
+Comment        = "#" { Character } Newline ;
+Letter         = "a" | ... | "z" | "A" | ... | "Z" ;
+Digit          = "0" | ... | "9" ;
+Character      = ? any Unicode character except '"' and newline ? ;
+Newline        = ? line feed ? ;
