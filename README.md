@@ -119,6 +119,7 @@ faramesh run --policy policy.fpl -- python agent.py
 | [Getting Started](docs/GETTING_STARTED.md) | Write your first policy in five minutes |
 | [Comparison](docs/COMPARISON.md) | Detailed comparison with OPA, Cedar, and YAML |
 | [Specification](spec/SPECIFICATION.md) | Formal language specification with EBNF grammar |
+| [Reference AST Schema](spec/AST_SCHEMA.md) | JSON shape produced by the reference parser |
 | [Examples](examples/) | Ready-to-use policy files for common agent types |
 
 ## File extension
@@ -148,11 +149,17 @@ Planned: VS Code extension, JetBrains plugin, Neovim treesitter grammar. See [ed
 # Run repository checks
 make test
 
+# Run executable conformance against reference parser
+make conformance-run
+
 # Run the experimental Go reference parser tests
 cd reference/go && go test ./...
 
 # Parse a fixture and print JSON AST
 cd reference/go && go run ./cmd/fplparse ../../conformance/valid/basic-agent.fpl
+
+# Format an FPL file
+cd reference/go && go run ./cmd/fplfmt ../../conformance/valid/basic-agent.fpl
 ```
 
 ## License

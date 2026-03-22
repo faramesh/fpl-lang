@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/faramesh/fpl-lang/reference/go/fpl/lexer"
 	"github.com/faramesh/fpl-lang/reference/go/fpl/token"
@@ -164,7 +165,15 @@ func (p *Parser) parseRule() (*Rule, error) {
 	}
 	p.nextToken()
 
-	for p.curToken.Type != token.Newline && p.curToken.Type != token.RBrace && p.curToken.Type != token.EOF {
+	for p.curToken.Type != token.RBrace && p.curToken.Type != token.EOF {
+		if p.curToken.Type == token.Newline {
+			if isClauseStart(p.peekToken.Type) {
+				p.nextToken()
+				continue
+			}
+			p.nextToken()
+			break
+		}
 		switch p.curToken.Type {
 		case token.When:
 			p.nextToken()
@@ -196,9 +205,6 @@ func (p *Parser) parseRule() (*Rule, error) {
 		}
 	}
 
-	if p.curToken.Type == token.Newline {
-		p.nextToken()
-	}
 	return rule, nil
 }
 
@@ -304,7 +310,11 @@ func (p *Parser) parsePrimary() (*Expr, error) {
 		p.nextToken()
 		return e, nil
 	case token.String, token.Number, token.Currency, token.True, token.False:
-		e := &Expr{Kind: "literal", Value: p.curToken.Literal}
+		lit := p.curToken.Literal
+		if p.curToken.Type == token.String {
+			lit = strconv.Quote(lit)
+		}
+		e := &Expr{Kind: "literal", Value: lit}
 		p.nextToken()
 		return e, nil
 	case token.LParen:
@@ -338,7 +348,11 @@ func (p *Parser) parseListLiteral() (*Expr, error) {
 		if items != "" {
 			items += ","
 		}
-		items += p.curToken.Literal
+		if p.curToken.Type == token.String {
+			items += strconv.Quote(p.curToken.Literal)
+		} else {
+			items += p.curToken.Literal
+		}
 		p.nextToken()
 		if p.curToken.Type == token.RBracket {
 			break
@@ -348,7 +362,7 @@ func (p *Parser) parseListLiteral() (*Expr, error) {
 		}
 	}
 	p.nextToken()
-	return &Expr{Kind: "list", Value: items}, nil
+	return &Expr{Kind: "list", Value: "[" + items + "]"}, nil
 }
 
 func (p *Parser) skipUnknownStatementOrBlock() {
@@ -395,6 +409,10 @@ func isComparisonToken(t token.Type) bool {
 	default:
 		return false
 	}
+}
+
+func isClauseStart(t token.Type) bool {
+	return t == token.When || t == token.Notify || t == token.Reason || t == token.Reeval
 }
 
 func (p *Parser) expectPeek(t token.Type) bool {

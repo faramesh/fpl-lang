@@ -19,6 +19,8 @@ jobs:
           test -d conformance
       - name: Validate conformance fixtures
         run: bash scripts/check-conformance.sh
+      - name: Execute conformance suite
+        run: bash scripts/run-conformance.sh
 
   go-reference-parser:
     runs-on: ubuntu-latest
