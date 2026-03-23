@@ -22,3 +22,7 @@ This is the documentation entry point for FPL, the Faramesh Policy Language for 
 1. New users: Getting Started -> Language Reference -> Examples
 2. Security/compliance reviewers: Comparison -> Language Reference -> Specification
 3. Language/tooling contributors: Specification -> AST Schema -> Conformance -> Reference parser
+
+## License
+
+FPL is licensed under the MIT License. See [LICENSE](../LICENSE).
