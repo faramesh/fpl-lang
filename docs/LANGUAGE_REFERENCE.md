@@ -2,6 +2,15 @@
 
 **Faramesh Policy Language (FPL)** is a domain-specific language for AI agent governance. It compiles to the same internal representation as YAML but provides agent-native primitives as first-class constructs.
 
+This reference is intended for teams implementing deterministic AI governance policy,
+AI execution control, and production agent guardrails.
+
+## Related guides
+
+- [Getting Started](GETTING_STARTED.md)
+- [Comparison](COMPARISON.md)
+- [Docs Index](README.md)
+
 ## Why FPL exists
 
 Governing AI agents today requires someone who understands authorization concepts, YAML schema, and the agent framework. FPL changes that. A compliance officer, CISO, or product manager can read and write FPL without understanding OPA Rego or YAML conventions. With natural language compilation, anyone who can describe a business rule in English can produce verified, backtested, production-ready governance policy.
@@ -413,3 +422,10 @@ FPL files are plain text. Store them in git, review in PRs, validate in CI:
 ```
 
 Policy versions are SHA-hashed and tracked in every DPR record, providing full traceability from decision back to the exact policy version that produced it.
+
+## Continue reading
+
+- [Getting Started](GETTING_STARTED.md)
+- [Comparison](COMPARISON.md)
+- [Specification](../spec/SPECIFICATION.md)
+- [Examples](../examples/)

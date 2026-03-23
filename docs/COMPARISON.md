@@ -1,5 +1,14 @@
 # FPL vs Other Policy Languages
 
+This page compares policy languages for AI governance, agent guardrails,
+and execution control in production tool-calling systems.
+
+## Related guides
+
+- [Getting Started](GETTING_STARTED.md)
+- [Language Reference](LANGUAGE_REFERENCE.md)
+- [Docs Index](README.md)
+
 ## FPL vs OPA / Rego
 
 OPA (Open Policy Agent) uses Rego, a general-purpose logic language designed for infrastructure authorization (Kubernetes admission, API gateways, microservices).
@@ -174,3 +183,16 @@ final_decision = {"effect": "deny", "reason": "budget exceeded"} {
     not budget_ok
 }
 ```
+
+## Summary
+
+- Choose **FPL** when you need agent-native policy constructs (budgets, phases, delegation, mandatory deny) with readable policy-as-code.
+- Choose **OPA/Rego** when you need broad infrastructure authorization outside agent runtime semantics.
+- Choose **Cedar** when your primary model is principal/action/resource application authorization.
+
+## Next steps
+
+- [Getting Started](GETTING_STARTED.md)
+- [Language Reference](LANGUAGE_REFERENCE.md)
+- [Specification](../spec/SPECIFICATION.md)
+- [Examples](../examples/)

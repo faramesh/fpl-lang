@@ -1,6 +1,15 @@
-# Getting Started with FPL
+# Getting Started with FPL for AI Governance
 
 Write your first AI agent governance policy in five minutes.
+
+FPL is designed for policy-as-code teams that need deterministic AI governance,
+AI agent guardrails, and execution control before tool actions run.
+
+## Recommended reading order
+
+1. [Language Reference](LANGUAGE_REFERENCE.md)
+2. [Comparison](COMPARISON.md)
+3. [Examples](../examples/)
 
 ## Prerequisites
 
@@ -112,3 +121,4 @@ faramesh agent deny <defer-token>
 - [Language Reference](LANGUAGE_REFERENCE.md) — every keyword and syntax construct
 - [Examples](../examples/) — ready-to-use policies for common agent types
 - [Comparison](COMPARISON.md) — how FPL compares to OPA, Cedar, and YAML
+- [Docs Index](README.md) — complete map of all documentation pages

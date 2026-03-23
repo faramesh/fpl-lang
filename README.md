@@ -1,5 +1,11 @@
 # FPL — Faramesh Policy Language
 
+## AI Governance Policy Language for AI Agents
+
+FPL is a domain-specific policy language for AI governance, AI agent guardrails, and AI execution control.
+It is designed for teams that need deterministic tool-call policy enforcement with human-readable policies,
+auditable decisions, and practical integration into modern agent frameworks.
+
 <p align="center">
   <strong>A domain-specific language for AI agent governance.</strong>
 </p>
@@ -65,6 +71,13 @@ The equivalent YAML is 60+ lines. This FPL is 25 lines with more readable struct
 - **Four input modes, one engine** — FPL directly, YAML (interchange), natural language (compiled to FPL), code annotations (`@faramesh.tool(defer_above=500)`).
 - **GitOps native** — plain text files, version-controlled, validated in CI.
 
+## Where FPL fits
+
+- AI governance programs that need policy-as-code for agent tool execution.
+- AI agent platforms that need explicit budgets, phases, delegation, and human approvals.
+- Security and compliance workflows that require deterministic decision logic and auditable policy history.
+- Teams moving from generic policy DSLs to an agent-native language model for execution control.
+
 ## Comparison
 
 | Feature | FPL | OPA / Rego | Cedar | YAML + expr |
@@ -115,9 +128,12 @@ faramesh run --policy policy.fpl -- python agent.py
 
 | Document | Description |
 |----------|-------------|
+| [Docs Index](docs/README.md) | Entry point for all FPL documentation and recommended reading order |
 | [Language Reference](docs/LANGUAGE_REFERENCE.md) | Complete language reference — every keyword, block, and syntax construct |
 | [Getting Started](docs/GETTING_STARTED.md) | Write your first policy in five minutes |
 | [Comparison](docs/COMPARISON.md) | Detailed comparison with OPA, Cedar, and YAML |
+| [Faramesh Core README](https://github.com/faramesh/faramesh-core) | Product-level runtime architecture and governance overview |
+| [Faramesh Core Docs Index](https://github.com/faramesh/faramesh-core/blob/main/docs/README.md) | Core documentation hub for engine, SDK, and architecture navigation |
 | [Specification](spec/SPECIFICATION.md) | Formal language specification with EBNF grammar |
 | [Reference AST Schema](spec/AST_SCHEMA.md) | JSON shape produced by the reference parser |
 | [Examples](examples/) | Ready-to-use policy files for common agent types |
@@ -138,6 +154,18 @@ This repository now follows a language-repo shape inspired by mature DSL project
 - `editors/` editor tooling plans and upcoming grammar packages
 
 The production-grade parser/compiler in `faramesh-core` remains the source of truth for runtime governance behavior. The `fpl-lang` repo focuses on language specification, conformance, and independent language tooling.
+
+### Repository map
+
+```text
+fpl-lang/
+├── docs/                 # Getting started, language reference, comparison
+├── spec/                 # Formal specification and AST schema
+├── grammar/              # EBNF grammar
+├── conformance/          # Valid/invalid fixture corpus
+├── reference/go/         # Experimental reference parser and CLI tools
+└── editors/              # Editor integration plans and grammar packages
+```
 
 ## Editor support
 
