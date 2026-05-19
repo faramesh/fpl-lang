@@ -108,21 +108,6 @@ curl -fsSL https://raw.githubusercontent.com/faramesh/faramesh-core/main/install
 go install github.com/faramesh/faramesh-core/cmd/faramesh@latest
 ```
 
-## Usage
-
-```bash
-# Validate an FPL file
-faramesh policy validate policy.fpl
-
-# Compile natural language to FPL
-faramesh policy compile "deny all shell commands, defer refunds over $500 to finance"
-
-# Parse and display structured output
-faramesh policy fpl policy.fpl --json
-
-# Run an agent under governance
-faramesh run --policy policy.fpl -- python agent.py
-```
 
 ## Documentation
 
