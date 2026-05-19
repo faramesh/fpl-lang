@@ -1,17 +1,17 @@
 # FPL Reference Parser (Go)
 
-This directory contains an **experimental** reference implementation scaffold, inspired by language repos such as HashiCorp's HCL where syntax tooling and conformance are first-class.
+This directory contains the Go reference parser and formatter for FPL, aligned with the structured AST used by `faramesh-core`.
 
 ## Scope
 
 Current scope:
 
-- Parse `agent` blocks with `default` and `rules` sections
-- Parse rule clauses: `when`, `notify:`, `reason:`, `reeval:`
-- Build AST nodes for boolean/comparison conditions (`and`, `or`, `not`, `matches`, `in`, comparison ops)
-- Provide a tiny formatter command (`fplfmt`) for canonical output
+- Parse the structured FPL document model: imports, runtime/provider/identity/trust blocks, agents, systems, and manifest lines
+- Parse agent sub-blocks for budgets, phases, delegates, ambients, selectors, credentials, egress, model policy, session, spawn, completion gates, enforcement, and alerts
+- Parse rule clauses including `when`, `notify:`, `reason:`, `host:`, `port:`, `method:`, `path:`, `query:`, `header:`, `headers:`, and legacy `reeval:`
+- Provide a formatter command (`fplfmt`) for canonical output
 
-This is not yet a full implementation of `grammar/fpl.ebnf`.
+This repository tracks the same structured grammar family as `faramesh-core` and is intended for parser/formatter conformance work.
 
 ## Run
 
@@ -24,7 +24,6 @@ go run ./cmd/fplfmt ../../conformance/valid/basic-agent.fpl
 
 ## Next milestones
 
-- Full lexical token set (durations, currency, patterns)
-- Rule and expression AST
-- Parse diagnostics with stable error codes
-- Conformance suite execution against valid/invalid fixtures
+- Keep the reference parser and runtime parser in lockstep as the grammar evolves
+- Expand conformance coverage for valid and invalid fixtures
+- Tighten canonical formatting for the full document model
